@@ -10,7 +10,7 @@ from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 
 SCOPES = ['https://www.googleapis.com/auth/spreadsheets']
-SPREADSHEET_ID = '1jz9qTfvp5hRZGuyN7HidmstlfEkVtcUe7kynWi0bUlY'
+SPREADSHEET_ID = '1nzlE0FmtF6EY8WbHU5wwC4sLaDbEYtnzGRy893yEhv4'
 SHEET_ID = 1532993005
 RANGE_NAME = 'Medal Hall!A3:D'
 TOKEN_PATH = "token.json"
@@ -30,11 +30,17 @@ def main():
 		print(err)
 
 	scores = get_scores()
+	rows_to_add = 0
 	for score in scores:
 		index = -1
 		for i, value in enumerate(values):
 			if score[0] == value[0]:
 				index = i # actual row is index + 3
+			
+		if index == -1:
+			values.append([score[0], '', '0'])
+			index = len(values) - 1
+			rows_to_add += 1
 
 		values[index][2] = str(int(values[index][2]) + 1)
 		if score[1] == 0:
@@ -43,7 +49,7 @@ def main():
 			else:
 				values[index].append('1')
 			
-	send_to_sheets(sheets, values)
+	send_to_sheets(sheets, values, rows_to_add)
 
 def auth():
 	creds = None
@@ -72,7 +78,7 @@ def get_scores():
 	arr = ast.literal_eval(arr[0])
 	return arr
 
-def send_to_sheets(sheets, values):
+def send_to_sheets(sheets, values, rows_to_add):
 	rows = []
 	for value in values:
 		rows.append({"values": [
@@ -99,6 +105,13 @@ def send_to_sheets(sheets, values):
 		]})
 
 	requests = [
+		{
+			"appendDimension": {
+				"sheetId": SHEET_ID,
+				"dimension": "ROWS",
+				"length": rows_to_add
+			}
+		},
 		{
 			"updateCells": {
 				"fields": "userEnteredValue",
