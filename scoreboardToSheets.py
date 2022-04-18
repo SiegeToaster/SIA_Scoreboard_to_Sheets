@@ -10,7 +10,7 @@ from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 
 SCOPES = ['https://www.googleapis.com/auth/spreadsheets']
-SPREADSHEET_ID = '1nzlE0FmtF6EY8WbHU5wwC4sLaDbEYtnzGRy893yEhv4'
+SPREADSHEET_ID = '1jz9qTfvp5hRZGuyN7HidmstlfEkVtcUe7kynWi0bUlY'
 SHEET_ID = 1532993005
 RANGE_NAME = 'Medal Hall!A3:D'
 TOKEN_PATH = "token.json"
