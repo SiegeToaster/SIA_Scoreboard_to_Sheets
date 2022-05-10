@@ -103,15 +103,19 @@ def send_to_sheets(sheets, values, rows_to_add):
 				}
 			}
 		]})
-
-	requests = [
-		{
-			"appendDimension": {
-				"sheetId": SHEET_ID,
-				"dimension": "ROWS",
-				"length": rows_to_add
+	requests = []
+	if rows_to_add > 0:
+		requests.append(
+			{
+				"appendDimension": {
+					"sheetId": SHEET_ID,
+					"dimension": "ROWS",
+					"length": rows_to_add
+				}
 			}
-		},
+		)
+		
+	requests.append(
 		{
 			"updateCells": {
 				"fields": "userEnteredValue",
@@ -123,7 +127,7 @@ def send_to_sheets(sheets, values, rows_to_add):
 				}
 			},
 		}
-	]
+	)
 
 	result = sheets.batchUpdate(
 		spreadsheetId=SPREADSHEET_ID, body={ "requests": requests }
