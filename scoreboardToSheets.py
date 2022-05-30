@@ -15,7 +15,8 @@ SCOPES = ['https://www.googleapis.com/auth/spreadsheets']
 SPREADSHEET_ID = '1nzlE0FmtF6EY8WbHU5wwC4sLaDbEYtnzGRy893yEhv4'
 SHEET_ID = 1532993005
 RANGE_NAME = 'Medal Hall!A3:D'
-TOKEN_PATH = "token.json"
+FILE_PATH = os.getcwd()
+TOKEN_PATH = FILE_PATH + "/token.json"
 
 DISCORD_TOKEN = ''
 DISCORD_CHANNEL_ID = 874088908210700300 # events channel for example
@@ -70,7 +71,7 @@ def auth():
 			creds.refresh(Request())
 		else:
 			flow = InstalledAppFlow.from_client_secrets_file(
-				'credentials.json', SCOPES)
+				FILE_PATH + '/credentials.json', SCOPES)
 			creds = flow.run_local_server(port=0)
 		# Save the credentials for the next run
 		with open(TOKEN_PATH, 'w') as token:
