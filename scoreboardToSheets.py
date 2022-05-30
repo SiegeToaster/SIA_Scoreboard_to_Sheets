@@ -3,6 +3,8 @@ import ast
 
 import os.path
 
+import discord
+
 from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
 from google_auth_oauthlib.flow import InstalledAppFlow
@@ -10,10 +12,13 @@ from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 
 SCOPES = ['https://www.googleapis.com/auth/spreadsheets']
-SPREADSHEET_ID = '1jz9qTfvp5hRZGuyN7HidmstlfEkVtcUe7kynWi0bUlY'
+SPREADSHEET_ID = '1nzlE0FmtF6EY8WbHU5wwC4sLaDbEYtnzGRy893yEhv4'
 SHEET_ID = 1532993005
 RANGE_NAME = 'Medal Hall!A3:D'
 TOKEN_PATH = "token.json"
+
+DISCORD_TOKEN = ''
+DISCORD_CHANNEL_ID = 874088908210700300 # events channel for example
 
 def main():
 	try:
@@ -50,6 +55,7 @@ def main():
 				values[index].append('1')
 			
 	send_to_sheets(sheets, values, rows_to_add)
+	send_to_discord(scores)
 
 def auth():
 	creds = None
@@ -103,6 +109,7 @@ def send_to_sheets(sheets, values, rows_to_add):
 				}
 			}
 		]})
+
 	requests = []
 	if rows_to_add > 0:
 		requests.append(
@@ -134,7 +141,26 @@ def send_to_sheets(sheets, values, rows_to_add):
 	).execute()
 
 	# print(result) # DEBUG
-	print('done')
+	print("spreadsheet updated")
+
+def send_to_discord(scores):
+	string_to_send = "💛 Gold Hearts: "
+	for score in scores:
+		if (score[1] == 0):
+			string_to_send += score[0] + ', '
+
+	string_to_send = string_to_send[0:-2]
+	print(string_to_send)
+	class MyClient(discord.Client):
+		async def on_ready(self):
+			channel = client.get_channel(DISCORD_CHANNEL_ID)
+			await channel.send(string_to_send)
+			print('discord message sent')
+			await client.close()
+
+
+	client = MyClient()
+	client.run(DISCORD_TOKEN)
 
 if __name__ == '__main__':
 	main()
