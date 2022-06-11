@@ -14,7 +14,7 @@ from googleapiclient.errors import HttpError
 SCOPES = ['https://www.googleapis.com/auth/spreadsheets']
 SPREADSHEET_ID = '1nzlE0FmtF6EY8WbHU5wwC4sLaDbEYtnzGRy893yEhv4'
 SHEET_ID = 1532993005
-RANGE_NAME = 'ARMA!A3:C'
+RANGE_NAME = 'ARMA!A2:C'
 FILE_PATH = os.getcwd()
 TOKEN_PATH = FILE_PATH + "/token.json"
 
@@ -34,6 +34,7 @@ def main():
 			return
 	except HttpError as err:
 		print(err)
+		return
 
 	scores = get_scores()
 	rows_to_add = 0
