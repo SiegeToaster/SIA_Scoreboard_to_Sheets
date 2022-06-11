@@ -14,7 +14,7 @@ from googleapiclient.errors import HttpError
 SCOPES = ['https://www.googleapis.com/auth/spreadsheets']
 SPREADSHEET_ID = '1nzlE0FmtF6EY8WbHU5wwC4sLaDbEYtnzGRy893yEhv4'
 SHEET_ID = 1532993005
-RANGE_NAME = 'Medal Hall!A3:D'
+RANGE_NAME = 'ARMA!A3:C'
 FILE_PATH = os.getcwd()
 TOKEN_PATH = FILE_PATH + "/token.json"
 
@@ -44,14 +44,14 @@ def main():
 				index = i # actual row is index + 3
 			
 		if index == -1:
-			values.append([score[0], '', '0'])
+			values.append([score[0], '0'])
 			index = len(values) - 1
 			rows_to_add += 1
 
-		values[index][2] = str(int(values[index][2]) + 1)
+		values[index][1] = str(int(values[index][1]) + 1)
 		if score[1] == 0:
-			if len(values[index]) == 4:
-				values[index][3] = str(int(values[index][3]) + 1)
+			if len(values[index]) == 3:
+				values[index][2] = str(int(values[index][2]) + 1)
 			else:
 				values[index].append('1')
 			
@@ -96,17 +96,12 @@ def send_to_sheets(sheets, values, rows_to_add):
 			},
 			{
 				"userEnteredValue": {
-					"stringValue": value[1] # should always be empty
+					"stringValue": value[1]
 				}
 			},
 			{
 				"userEnteredValue": {
-					"stringValue": value[2]
-				}
-			},
-			{
-				"userEnteredValue": {
-					"stringValue": value[3] if len(value) == 4 else ''
+					"stringValue": value[2] if len(value) == 3 else ''
 				}
 			}
 		]})
