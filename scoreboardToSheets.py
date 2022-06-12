@@ -126,7 +126,7 @@ def send_to_sheets(sheets, values, rows_to_add):
 				"rows": rows,
 				"start": {
 					"columnIndex": 0,
-					"rowIndex": 2,
+					"rowIndex": 1,
 					"sheetId": SHEET_ID
 				}
 			},
